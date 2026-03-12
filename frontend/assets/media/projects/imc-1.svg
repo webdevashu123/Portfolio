@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#10233a"/>
+  <rect x="40" y="40" width="1120" height="620" rx="20" fill="#163554"/>
+  <text x="80" y="110" fill="#6ce5bc" font-size="40" font-family="Arial">IMC Billing Dashboard</text>
+  <rect x="80" y="150" width="1040" height="120" rx="12" fill="#1c466d"/>
+  <rect x="80" y="300" width="500" height="320" rx="12" fill="#225884"/>
+  <rect x="620" y="300" width="500" height="320" rx="12" fill="#225884"/>
+</svg>

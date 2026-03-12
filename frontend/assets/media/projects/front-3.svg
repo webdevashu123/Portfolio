@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#12233a"/>
+  <rect x="40" y="40" width="1120" height="620" rx="18" fill="#214160"/>
+  <text x="80" y="110" fill="#78efc6" font-size="36" font-family="Arial">Live Export Preview</text>
+  <rect x="80" y="160" width="520" height="460" rx="10" fill="#2c5b83"/>
+  <rect x="630" y="160" width="490" height="460" rx="10" fill="#366d98"/>
+</svg>

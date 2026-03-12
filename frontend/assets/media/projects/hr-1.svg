@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#12243a"/>
+  <rect x="50" y="50" width="1100" height="600" rx="18" fill="#203f60"/>
+  <text x="90" y="120" fill="#8cefd0" font-size="36" font-family="Arial">HR Dashboard Overview</text>
+  <rect x="90" y="170" width="1010" height="180" rx="10" fill="#2d5c86"/>
+  <rect x="90" y="370" width="490" height="230" rx="10" fill="#376894"/>
+  <rect x="610" y="370" width="490" height="230" rx="10" fill="#376894"/>
+</svg>

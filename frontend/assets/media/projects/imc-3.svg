@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#11263f"/>
+  <rect x="40" y="40" width="1120" height="620" rx="18" fill="#1f4266"/>
+  <text x="80" y="110" fill="#7df0ca" font-size="36" font-family="Arial">Inventory + Reports</text>
+  <rect x="80" y="160" width="1040" height="210" rx="12" fill="#2a5a88"/>
+  <rect x="80" y="390" width="335" height="230" rx="12" fill="#346999"/>
+  <rect x="432" y="390" width="335" height="230" rx="12" fill="#346999"/>
+  <rect x="785" y="390" width="335" height="230" rx="12" fill="#346999"/>
+</svg>

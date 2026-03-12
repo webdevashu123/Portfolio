@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#0f1d30"/>
+  <rect x="50" y="50" width="1100" height="600" rx="20" fill="#1a3451"/>
+  <text x="90" y="120" fill="#ffd166" font-size="38" font-family="Arial">Invoice Generator</text>
+  <rect x="90" y="170" width="720" height="430" rx="12" fill="#244d76"/>
+  <rect x="840" y="170" width="260" height="430" rx="12" fill="#2f608f"/>
+</svg>

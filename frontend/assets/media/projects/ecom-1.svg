@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#12253b"/>
+  <rect x="40" y="40" width="1120" height="620" rx="18" fill="#1b3a59"/>
+  <text x="80" y="110" fill="#7decc8" font-size="38" font-family="Arial">E-commerce Home</text>
+  <rect x="80" y="160" width="1040" height="170" rx="10" fill="#25507a"/>
+  <rect x="80" y="350" width="320" height="270" rx="10" fill="#2f628f"/>
+  <rect x="440" y="350" width="320" height="270" rx="10" fill="#2f628f"/>
+  <rect x="800" y="350" width="320" height="270" rx="10" fill="#2f628f"/>
+</svg>

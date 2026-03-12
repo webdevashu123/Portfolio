@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760">
+  <rect width="1200" height="760" fill="#0e1c2e"/>
+  <text x="60" y="70" fill="#ffd166" font-size="36" font-family="Arial">IMC Billing Architecture</text>
+  <rect x="60" y="120" width="240" height="120" rx="12" fill="#2a5177"/>
+  <text x="100" y="190" fill="#ffffff" font-size="24" font-family="Arial">Frontend</text>
+  <rect x="420" y="120" width="300" height="120" rx="12" fill="#326490"/>
+  <text x="500" y="190" fill="#ffffff" font-size="24" font-family="Arial">API Layer</text>
+  <rect x="860" y="120" width="280" height="120" rx="12" fill="#3a75a8"/>
+  <text x="925" y="190" fill="#ffffff" font-size="24" font-family="Arial">MongoDB</text>
+  <rect x="420" y="360" width="300" height="120" rx="12" fill="#2f5f88"/>
+  <text x="470" y="430" fill="#ffffff" font-size="24" font-family="Arial">Billing Service</text>
+  <rect x="420" y="560" width="300" height="120" rx="12" fill="#285275"/>
+  <text x="470" y="630" fill="#ffffff" font-size="24" font-family="Arial">Reports Module</text>
+  <line x1="300" y1="180" x2="420" y2="180" stroke="#7decc8" stroke-width="6"/>
+  <line x1="720" y1="180" x2="860" y2="180" stroke="#7decc8" stroke-width="6"/>
+  <line x1="570" y1="240" x2="570" y2="360" stroke="#ffd166" stroke-width="6"/>
+  <line x1="570" y1="480" x2="570" y2="560" stroke="#ffd166" stroke-width="6"/>
+</svg>

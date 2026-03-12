@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#112036"/>
+  <rect x="50" y="50" width="1100" height="600" rx="18" fill="#224567"/>
+  <text x="90" y="120" fill="#ffd166" font-size="36" font-family="Arial">Theme Presets</text>
+  <rect x="90" y="170" width="1010" height="430" rx="10" fill="#2f638f"/>
+</svg>

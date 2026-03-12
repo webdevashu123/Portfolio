@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#13233a"/>
+  <rect x="40" y="40" width="1120" height="620" rx="18" fill="#203f60"/>
+  <text x="80" y="110" fill="#8cefd0" font-size="36" font-family="Arial">Portfolio Builder Canvas</text>
+  <rect x="80" y="160" width="290" height="460" rx="10" fill="#2b597f"/>
+  <rect x="400" y="160" width="720" height="460" rx="10" fill="#356a95"/>
+</svg>

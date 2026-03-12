@@ -1,0 +1,83 @@
+/* Blink animation for typed text */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s infinite;
+}
+
+/* Project toolbar */
+.project-toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.project-features {
+  margin: 12px 0;
+}
+
+.project-features h4 {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.project-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.project-features li {
+  padding: 4px 0;
+  padding-left: 16px;
+  position: relative;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.project-features li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+}
+
+.project-subtitle {
+  font-size: 0.9rem;
+  color: var(--primary-dark) !important;
+  font-weight: 600;
+  margin-bottom: 8px !important;
+}
+
+/* Section header */
+.section-header {
+  margin-bottom: 32px;
+}
+
+.section-header h2 {
+  margin-top: 8px;
+}
+
+/* Trust strip */
+.trust-strip {
+  padding: 16px 0;
+  border-top: 1px solid var(--stroke);
+  border-bottom: 1px solid var(--stroke);
+  background: var(--surface);
+}
+
+.trust-strip .trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.trust-strip .trust-row span {
+  font-size: 0.85rem;
+  padding: 8px 16px;
+}
