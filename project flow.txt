@@ -1,0 +1,15 @@
+Project_02/
+├── frontend/
+│   ├── index.html          # Main SPA entry
+│   ├── assets/
+│   │   ├── css/            # Stylesheets
+│   │   ├── js/
+│   │   │   ├── app.js      # Router & components
+│   │   │   └── modules/   # JS modules
+│   │   └── media/         # Images
+├── backend/
+│   ├── index.js            # Express server
+│   ├── models/             # MongoDB models
+│   └── utils/              # Mailer
+├── package.json
+└── .env.example            # Template for deployment
