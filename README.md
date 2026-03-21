@@ -98,20 +98,7 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 NEXT_PUBLIC_SENTRY_DSN=
 ```
 
-Backend (`backend/.env.example`):
-```
-PORT=5000
-MONGODB_URI=mongodb://127.0.0.1:27017/portfolio_db
-ADMIN_EMAIL=helloashutosh1@outlook.com
-ADMIN_PASSWORD=admin123
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-SMTP_FROM=your-email@gmail.com
-OWNER_EMAIL=helloashutosh1@outlook.com
-ALLOWED_ORIGIN=*
-```
+
 
 ---
 
