@@ -172,7 +172,7 @@ export default function AIChatbot() {
       {
         key: 'contact',
         keywords: ['contact', 'email', 'reach', 'call', 'schedule', 'meet'],
-        answer: `📞 Contact:\n\n- Email: hello@ashutoshranjan.com\n- Response: within 12-24 hours\n- Remote-friendly (India based)\n\nShare your goal and timeline, and I'll come back with a clear, actionable plan.`,
+        answer: `📞 Contact:\n\n- Email: helloashutosh1@outlook.com\n- Response: within 12-24 hours\n- Remote-friendly (India based)\n\nShare your goal and timeline, and I'll come back with a clear, actionable plan.`,
         actions: ['Availability', 'Start a project']
       },
       {
@@ -292,14 +292,38 @@ export default function AIChatbot() {
     }
 
     if (conversationMode === 'smart') {
-      return `That's a good question. I can help with scope, pricing, timelines, and the best tech choices.\n\nTell me your goal and deadline, and I'll propose a clear plan to get you live quickly.`;
+      return `Great question. To give you a precise answer, share:\n\n- Your goal or problem\n- Must-have features\n- Target launch date\n\nI’ll respond with a clear plan, effort estimate, and best next step.`;
     }
 
-    return `I can help with services, pricing, timelines, and how to start. What's your focus?`;
+    return `I can help with services, pricing, timelines, and how to start. Tell me the goal and your deadline.`;
   };
 
   const pushAssistant = (text, meta = {}) => {
     setMessages((prev) => [...prev, makeMessage('assistant', text, meta)]);
+  };
+
+  const renderMessageContent = (content) => {
+    const blocks = content.split(/\n{2,}/).filter(Boolean);
+    return blocks.map((block, idx) => {
+      const lines = block.split('\n').filter(Boolean);
+      const isList = lines.length > 1 && lines.every((l) => /^[-•]\s+/.test(l));
+      if (isList) {
+        return (
+          <ul key={`list-${idx}`} style={{ margin: '6px 0 0 18px', padding: 0, lineHeight: 1.6 }}>
+            {lines.map((line, i) => (
+              <li key={`item-${i}`} style={{ marginBottom: '4px' }}>
+                {line.replace(/^[-•]\s+/, '')}
+              </li>
+            ))}
+          </ul>
+        );
+      }
+      return (
+        <p key={`p-${idx}`} style={{ margin: idx === 0 ? 0 : '8px 0 0', lineHeight: 1.6 }}>
+          {lines.join('\n')}
+        </p>
+      );
+    });
   };
 
   const handleSubmit = (e) => {
@@ -527,21 +551,21 @@ export default function AIChatbot() {
     position: 'fixed',
     bottom: '24px',
     right: '24px',
-    width: '68px',
-    height: '68px',
-    borderRadius: '20px',
-    background:
-      'radial-gradient(circle at top, rgba(255,255,255,0.25), rgba(255,255,255,0) 60%), linear-gradient(135deg, rgba(10,143,106,0.98), rgba(99,102,241,0.98))',
-    border: '1px solid rgba(255,255,255,0.25)',
+    width: '72px',
+    height: '72px',
+    borderRadius: '18px',
+    background: 'transparent',
+    border: 'none',
     cursor: 'pointer',
-    boxShadow: '0 18px 40px rgba(10, 143, 106, 0.3)',
+    boxShadow: '0 12px 26px rgba(0, 0, 0, 0.18)',
     zIndex: 9999,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '1.5rem',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    animation: 'chat-float 4s ease-in-out infinite'
+    fontSize: '1.4rem',
+    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+    animation: 'chat-breathe 3.6s ease-in-out infinite',
+    padding: 0
   };
 
   const chatWindowStyle = {
@@ -552,7 +576,7 @@ export default function AIChatbot() {
     maxWidth: 'calc(100vw - 40px)',
     height: '560px',
     maxHeight: 'calc(100vh - 140px)',
-    background: 'rgba(18, 18, 25, 0.55)',
+    background: 'var(--chat-bg)',
     backdropFilter: 'blur(18px)',
     borderRadius: '18px',
     boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
@@ -560,7 +584,7 @@ export default function AIChatbot() {
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    border: '1px solid rgba(255,255,255,0.14)'
+    border: '1px solid var(--chat-border)'
   };
 
   return (
@@ -579,41 +603,36 @@ export default function AIChatbot() {
         title="Chat with AI"
       >
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {isOpen ? (
-            <span style={{ fontSize: '1.3rem' }}>✕</span>
-          ) : (
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 28 28"
-              fill="none"
-              aria-hidden="true"
+          {isOpen && (
+            <span
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.3rem',
+                color: 'var(--chat-text)',
+                background: 'var(--chat-bg)',
+                border: '1px solid var(--chat-border)',
+                borderRadius: '18px'
+              }}
             >
-              <defs>
-                <linearGradient id="aiOrb" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#e0f2ff" />
-                  <stop offset="100%" stopColor="#ffffff" />
-                </linearGradient>
-              </defs>
-              <circle cx="14" cy="14" r="10" fill="url(#aiOrb)" opacity="0.95" />
-              <circle cx="14" cy="14" r="9.5" stroke="rgba(255,255,255,0.55)" />
-              <path
-                d="M10.6 14c0-1.9 1.5-3.4 3.4-3.4 1.4 0 2.6.8 3.1 2"
-                stroke="#0a8f6a"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-              />
-              <circle cx="10.2" cy="14.2" r="1.2" fill="#0a8f6a" />
-              <circle cx="17.4" cy="12.6" r="1" fill="#6366f1" />
-              <path
-                d="M16.6 18.2c-1.7 1.2-3.9 1.2-5.6 0"
-                stroke="#6366f1"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-              />
-            </svg>
+              ✕
+            </span>
           )}
-          {!isOpen && <span className="chat-pulse" />}
+          <img
+            src="/images/AI.png"
+            alt="Chat"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '18px',
+              opacity: isOpen ? 0 : 1
+            }}
+          />
+          
         </div>
       </button>
 
@@ -622,8 +641,8 @@ export default function AIChatbot() {
           <div
             style={{
               padding: '14px 16px',
-              background: 'linear-gradient(135deg, rgba(10,143,106,0.95), rgba(99,102,241,0.95))',
-              color: 'white',
+              background: 'linear-gradient(135deg, rgba(16, 132, 99, 0.95), rgba(99,102,241,0.95))',
+              color: 'var(--chat-header-text)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -653,34 +672,54 @@ export default function AIChatbot() {
               </div>
               <div>
                 <strong>AI Assistant</strong>
-                <div style={{ fontSize: '0.7rem', opacity: 0.9 }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--chat-header-muted)' }}>
                   Online - {conversationMode === 'smart' ? 'Smart' : 'FAQ'} Mode
                 </div>
               </div>
             </div>
             <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
               <button
-                onClick={() => setConversationMode(conversationMode === 'smart' ? 'faq' : 'smart')}
+                onClick={() => {
+                  setShowConverter(true);
+                  setShowCalculator(false);
+                }}
                 style={{
-                  background: 'rgba(255,255,255,0.18)',
-                  border: '1px solid rgba(255,255,255,0.18)',
+                  background: 'var(--chat-bubble)',
+                  border: '1px solid var(--chat-border)',
                   borderRadius: '8px',
                   padding: '6px 10px',
-                  color: 'white',
+                  color: 'var(--chat-text)',
                   cursor: 'pointer',
                   fontSize: '0.7rem'
                 }}
               >
-                {conversationMode === 'smart' ? 'Switch to FAQ' : 'Switch to Smart'}
+                Currency
+              </button>
+              <button
+                onClick={() => {
+                  setShowCalculator(true);
+                  setShowConverter(false);
+                }}
+                style={{
+                  background: 'var(--chat-bubble)',
+                  border: '1px solid var(--chat-border)',
+                  borderRadius: '8px',
+                  padding: '6px 10px',
+                  color: 'var(--chat-text)',
+                  cursor: 'pointer',
+                  fontSize: '0.7rem'
+                }}
+              >
+                Calculator
               </button>
               <button
                 onClick={() => setIsOpen(false)}
                 style={{
-                  background: 'rgba(255,255,255,0.18)',
-                  border: '1px solid rgba(255,255,255,0.18)',
+                  background: 'var(--chat-bubble)',
+                  border: '1px solid var(--chat-border)',
                   borderRadius: '8px',
                   padding: '6px 10px',
-                  color: 'white',
+                  color: 'var(--chat-text)',
                   cursor: 'pointer',
                   fontSize: '0.85rem'
                 }}
@@ -694,8 +733,8 @@ export default function AIChatbot() {
             <div
               style={{
                 padding: '14px',
-                background: 'linear-gradient(135deg, rgba(10,143,106,0.12), rgba(99,102,241,0.12))',
-                borderBottom: '1px solid rgba(255,255,255,0.08)'
+                background: 'var(--chat-panel)',
+                borderBottom: '1px solid var(--chat-border)'
               }}
             >
               <div
@@ -703,12 +742,12 @@ export default function AIChatbot() {
                   fontSize: '0.8rem',
                   fontWeight: 600,
                   marginBottom: '10px',
-                  color: 'white'
+                  color: 'var(--chat-text)'
                 }}
               >
                 💱 Currency Converter{' '}
                 {ratesLastUpdated && (
-                  <span style={{ fontWeight: 400, fontSize: '0.7rem', opacity: 0.8 }}>
+                  <span style={{ fontWeight: 400, fontSize: '0.7rem', color: 'var(--chat-muted)' }}>
                     (updated {ratesLastUpdated})
                   </span>
                 )}
@@ -726,9 +765,9 @@ export default function AIChatbot() {
                     flex: 1,
                     padding: '8px 10px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    background: 'rgba(10,12,18,0.55)',
-                    color: 'white',
+                    border: '1px solid var(--chat-border)',
+                    background: 'var(--chat-input)',
+                    color: 'var(--chat-text)',
                     fontSize: '0.85rem'
                   }}
                 />
@@ -741,9 +780,9 @@ export default function AIChatbot() {
                   style={{
                     padding: '8px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    background: 'rgba(10,12,18,0.55)',
-                    color: 'white',
+                    border: '1px solid var(--chat-border)',
+                    background: 'var(--chat-input)',
+                    color: 'var(--chat-text)',
                     fontSize: '0.8rem'
                   }}
                 >
@@ -765,9 +804,9 @@ export default function AIChatbot() {
                     flex: 1,
                     padding: '8px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    background: 'rgba(10,12,18,0.55)',
-                    color: 'white',
+                    border: '1px solid var(--chat-border)',
+                    background: 'var(--chat-input)',
+                    color: 'var(--chat-text)',
                     fontSize: '0.8rem'
                   }}
                 >
@@ -784,7 +823,7 @@ export default function AIChatbot() {
                     borderRadius: '8px',
                     border: 'none',
                     background: 'linear-gradient(135deg, #0a8f6a, #6366f1)',
-                    color: 'white',
+                    color: 'var(--chat-header-text)',
                     cursor: 'pointer',
                     fontSize: '0.8rem',
                     fontWeight: 600
@@ -800,7 +839,7 @@ export default function AIChatbot() {
                 }}
                 style={{
                   fontSize: '0.7rem',
-                  color: 'rgba(255,255,255,0.7)',
+                  color: 'var(--chat-muted)',
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
@@ -815,11 +854,11 @@ export default function AIChatbot() {
                     marginTop: '10px',
                     padding: '10px 12px',
                     borderRadius: '10px',
-                    background: 'rgba(10,12,18,0.55)',
-                    color: 'white',
+                    background: 'var(--chat-input)',
+                    color: 'var(--chat-text)',
                     fontSize: '0.78rem',
                     whiteSpace: 'pre-wrap',
-                    border: '1px solid rgba(255,255,255,0.12)'
+                    border: '1px solid var(--chat-border)'
                   }}
                 >
                   {converterResult}
@@ -832,8 +871,8 @@ export default function AIChatbot() {
             <div
               style={{
                 padding: '12px',
-                background: 'rgba(250, 250, 250, 0.95)',
-                borderBottom: '1px solid rgba(255,255,255,0.08)'
+                background: 'var(--chat-panel)',
+                borderBottom: '1px solid var(--chat-border)'
               }}
             >
               <div
@@ -844,12 +883,12 @@ export default function AIChatbot() {
                   marginBottom: '8px'
                 }}
               >
-                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#1a1a2e' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--chat-text)' }}>
                   🧮 Calculator
                 </div>
                 <button
                   onClick={() => setShowCalculator(false)}
-                  style={{ fontSize: '0.7rem', color: '#666', background: 'none', border: 'none' }}
+                  style={{ fontSize: '0.7rem', color: 'var(--chat-muted)', background: 'none', border: 'none' }}
                 >
                   Close
                 </button>
@@ -857,7 +896,7 @@ export default function AIChatbot() {
 
               <div
                 style={{
-                  background: '#ffffff',
+                  background: 'var(--chat-input)',
                   borderRadius: '12px',
                   padding: '16px',
                   marginBottom: '12px',
@@ -867,7 +906,7 @@ export default function AIChatbot() {
                 <div
                   style={{
                     fontSize: '0.7rem',
-                    color: '#888',
+                    color: 'var(--chat-muted)',
                     textAlign: 'right',
                     minHeight: '14px',
                     fontFamily: 'monospace',
@@ -881,7 +920,7 @@ export default function AIChatbot() {
                     fontSize: '2rem',
                     fontWeight: 600,
                     textAlign: 'right',
-                    color: '#1a1a2e',
+                    color: 'var(--chat-text)',
                     fontFamily: "'Poppins', 'Segoe UI', sans-serif",
                     wordBreak: 'break-all',
                     lineHeight: 1.2
@@ -959,7 +998,7 @@ export default function AIChatbot() {
               display: 'flex',
               flexDirection: 'column',
               gap: '10px',
-              background: 'linear-gradient(180deg, rgba(10,12,18,0.6), rgba(10,12,18,0.85))'
+              background: 'var(--chat-surface)'
             }}
           >
             {messages.map((msg) => (
@@ -968,25 +1007,28 @@ export default function AIChatbot() {
                   style={{
                     padding: '10px 14px',
                     borderRadius: '14px',
-                    maxWidth: '88%',
+                    maxWidth: '92%',
                     alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
                     background:
                       msg.role === 'user'
-                        ? 'linear-gradient(135deg, rgba(10,143,106,0.95), rgba(10,143,106,0.95))'
-                        : 'rgba(255,255,255,0.08)',
-                    color: msg.role === 'user' ? 'white' : 'rgba(255,255,255,0.95)',
-                    border: msg.role === 'assistant' ? '1px solid rgba(255,255,255,0.08)' : 'none',
-                    whiteSpace: 'pre-wrap',
-                    lineHeight: 1.5,
-                    fontSize: '0.85rem'
+                        ? 'var(--chat-user-bg)'
+                        : 'var(--chat-bubble)',
+                    color: msg.role === 'user' ? '#ffffff' : 'var(--chat-answer-text)',
+                    border: msg.role === 'assistant' ? '1px solid var(--chat-border)' : '1px solid rgba(255,255,255,0.12)',
+                    lineHeight: 1.6,
+                    fontSize: '0.92rem',
+                    boxShadow:
+                      msg.role === 'user'
+                        ? 'var(--chat-user-shadow)'
+                        : '0 8px 18px rgba(15, 23, 42, 0.12)'
                   }}
                 >
-                  {msg.content}
+                  {renderMessageContent(msg.content)}
                 </div>
                 <div
                   style={{
-                    fontSize: '0.65rem',
-                    color: 'rgba(255,255,255,0.6)',
+                    fontSize: '0.7rem',
+                    color: 'var(--chat-muted)',
                     marginTop: '4px',
                     alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start'
                   }}
@@ -1001,10 +1043,10 @@ export default function AIChatbot() {
                   padding: '10px 14px',
                   borderRadius: '12px',
                   alignSelf: 'flex-start',
-                  background: 'rgba(255,255,255,0.08)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'var(--chat-bubble)',
+                  border: '1px solid var(--chat-border)',
                   fontSize: '0.8rem',
-                  color: 'white'
+                  color: 'var(--chat-text)'
                 }}
               >
                 <span className="typing">Thinking</span>
@@ -1017,11 +1059,11 @@ export default function AIChatbot() {
             <div
               style={{
                 padding: '8px 10px',
-                borderTop: '1px solid rgba(255,255,255,0.08)',
-                background: 'rgba(12,12,18,0.8)'
+                borderTop: '1px solid var(--chat-border)',
+                background: 'var(--chat-panel)'
               }}
             >
-              <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.65)', marginBottom: '6px' }}>
+              <div style={{ fontSize: '0.65rem', color: 'var(--chat-muted)', marginBottom: '6px' }}>
                 Quick questions
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -1032,10 +1074,10 @@ export default function AIChatbot() {
                     style={{
                       padding: '6px 10px',
                       fontSize: '0.65rem',
-                      background: 'rgba(255,255,255,0.08)',
-                      border: '1px solid rgba(255,255,255,0.08)',
+                      background: 'var(--chat-bubble)',
+                      border: '1px solid var(--chat-border)',
                       borderRadius: '14px',
-                      color: 'white',
+                      color: 'var(--chat-text)',
                       cursor: 'pointer'
                     }}
                   >
@@ -1050,8 +1092,8 @@ export default function AIChatbot() {
             <div
               style={{
                 padding: '8px 10px',
-                borderTop: '1px solid rgba(255,255,255,0.08)',
-                background: 'rgba(12,12,18,0.8)'
+                borderTop: '1px solid var(--chat-border)',
+                background: 'var(--chat-panel)'
               }}
             >
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -1062,10 +1104,10 @@ export default function AIChatbot() {
                     style={{
                       padding: '6px 10px',
                       fontSize: '0.65rem',
-                      background: 'rgba(255,255,255,0.08)',
-                      border: '1px solid rgba(255,255,255,0.08)',
+                      background: 'var(--chat-bubble)',
+                      border: '1px solid var(--chat-border)',
                       borderRadius: '14px',
-                      color: 'white',
+                      color: 'var(--chat-text)',
                       cursor: 'pointer'
                     }}
                   >
@@ -1080,27 +1122,27 @@ export default function AIChatbot() {
             onSubmit={handleSubmit}
             style={{
               padding: '10px',
-              borderTop: '1px solid rgba(255,255,255,0.08)',
+              borderTop: '1px solid var(--chat-border)',
               display: 'flex',
               gap: '6px',
-              background: 'rgba(12,12,18,0.9)'
+              background: 'var(--chat-panel)'
             }}
           >
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask anything..."
+              placeholder="Ask about services, pricing, timelines..."
               disabled={isLoading || showCalculator}
               ref={chatInputRef}
               style={{
                 flex: 1,
                 padding: '10px 14px',
                 borderRadius: '20px',
-                border: '1px solid rgba(255,255,255,0.1)',
-                background: 'rgba(10,12,18,0.7)',
-                color: 'white',
-                fontSize: '0.85rem',
+                border: '1px solid var(--chat-border)',
+                background: 'var(--chat-input)',
+                color: 'var(--chat-text)',
+                fontSize: '0.95rem',
                 outline: 'none'
               }}
             />
@@ -1111,9 +1153,9 @@ export default function AIChatbot() {
                 width: '40px',
                 height: '40px',
                 borderRadius: '12px',
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                color: 'white',
+                background: 'var(--chat-bubble)',
+                border: '1px solid var(--chat-border)',
+                color: 'var(--chat-text)',
                 cursor: 'pointer',
                 fontSize: '0.9rem'
               }}
@@ -1130,10 +1172,10 @@ export default function AIChatbot() {
                 borderRadius: '12px',
                 background:
                   isLoading || !input.trim()
-                    ? 'rgba(255,255,255,0.1)'
+                    ? 'var(--chat-bubble)'
                     : 'linear-gradient(135deg, #0a8f6a, #6366f1)',
                 border: 'none',
-                color: 'white',
+                color: isLoading || !input.trim() ? 'var(--chat-text)' : 'white',
                 cursor: isLoading || !input.trim() ? 'not-allowed' : 'pointer',
                 fontSize: '0.9rem',
                 display: 'flex',
@@ -1167,12 +1209,12 @@ export default function AIChatbot() {
           animation: pulse-ring 2.4s ease-out infinite;
         }
 
-        @keyframes chat-float {
+        @keyframes chat-breathe {
           0%, 100% {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
           }
           50% {
-            transform: translateY(-4px);
+            transform: translateY(-2px) scale(1.02);
           }
         }
 
@@ -1203,4 +1245,6 @@ export default function AIChatbot() {
     </>
   );
 }
+
+
 

@@ -807,7 +807,7 @@ const pages = {
               <span class="method-icon">📧</span>
               <div>
                 <strong>Email</strong>
-                <p>hello@ashutoshranjan.com</p>
+                <p>helloashutosh1@outlook.com</p>
               </div>
             </div>
             <div class="contact-method">
@@ -827,8 +827,8 @@ const pages = {
           </div>
 
           <div class="social-links">
-            <a href="https://github.com" target="_blank" class="social-link">GitHub</a>
-            <a href="https://linkedin.com" target="_blank" class="social-link">LinkedIn</a>
+            <a href="https://github.com/webdevashu123" target="_blank" class="social-link">GitHub</a>
+            <a href="https://www.linkedin.com/in/ashutosh-ranjan-dev/" target="_blank" class="social-link">LinkedIn</a>
             <a href="https://twitter.com" target="_blank" class="social-link">Twitter</a>
           </div>
         </div>
@@ -1034,3 +1034,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.initScrollAnimations = initScrollAnimations;
+
+

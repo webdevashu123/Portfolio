@@ -102,14 +102,14 @@ Backend (`backend/.env.example`):
 ```
 PORT=5000
 MONGODB_URI=mongodb://127.0.0.1:27017/portfolio_db
-ADMIN_EMAIL=hello@ashutoshranjan.com
+ADMIN_EMAIL=helloashutosh1@outlook.com
 ADMIN_PASSWORD=admin123
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-app-password
 SMTP_FROM=your-email@gmail.com
-OWNER_EMAIL=hello@ashutoshranjan.com
+OWNER_EMAIL=helloashutosh1@outlook.com
 ALLOWED_ORIGIN=*
 ```
 
@@ -134,6 +134,21 @@ cd backend
 npm install
 npm run dev
 ```
+
+---
+
+## Production (Vercel + Render + MongoDB Atlas)
+Frontend (Vercel):
+1. Set `NEXT_PUBLIC_API_URL` to your Render backend URL.
+2. Set `NEXT_PUBLIC_SITE_URL` to your production domain.
+3. Deploy `frontend/`.
+
+Backend (Render):
+1. Set `NODE_ENV=production`.
+2. Set `MONGODB_URI` to your Atlas connection string.
+3. Set `ADMIN_EMAIL` and a strong `ADMIN_PASSWORD`.
+4. Set `ALLOWED_ORIGIN` to your Vercel domain (comma-separated).
+5. Deploy `backend/`. Health check: `/health`.
 
 ---
 
@@ -186,3 +201,5 @@ If you want, I can:
 2. Create `.gitignore`
 3. Add remote and push
 4. Generate a production checklist
+
+

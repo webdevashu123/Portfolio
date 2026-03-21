@@ -25,7 +25,7 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/portfo
 // Password: admin123
 
 let adminCredentials = {
-  email: process.env.ADMIN_EMAIL || "hello@ashutoshranjan.com",
+  email: process.env.ADMIN_EMAIL || "helloashutosh1@outlook.com",
   password: process.env.ADMIN_PASSWORD || "admin123"  // CHANGE THIS PASSWORD FOR PRODUCTION!
 };
 
@@ -209,7 +209,7 @@ app.get("/api/resume/download", (_req, res) => {
 
   doc.fontSize(26).fillColor("#0a8f6a").text("Ashu", { continued: true }).fillColor("#112031").text("  |  Full Stack Developer");
   doc.moveDown(0.5);
-  doc.fontSize(11).fillColor("#4b6078").text("Email: hello@ashudev.com  |  GitHub: github.com/  |  LinkedIn: linkedin.com/");
+  doc.fontSize(11).fillColor("#4b6078").text("Email: helloashutosh1@outlook.com  |  GitHub: github.com/webdevashu123  |  LinkedIn: linkedin.com/in/ashutosh-ranjan-dev/");
   doc.moveDown();
 
   doc.fontSize(14).fillColor("#112031").text("Professional Summary");
@@ -401,3 +401,5 @@ app.get("/", (_req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+

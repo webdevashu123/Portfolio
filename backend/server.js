@@ -29,6 +29,8 @@ require("dotenv").config({ path: __dirname + "/.env" });
 const path = require("path");
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const mongoose = require("mongoose");
 const PDFDocument = require("pdfkit");
 const ContactSubmission = require("./models/ContactSubmission");
@@ -38,6 +40,8 @@ const ServiceInquiry = require("./models/ServiceInquiry");
 const { createTransporter } = require("./utils/mailer");
 
 const app = express();
+app.set("trust proxy", 1);
+app.disable("x-powered-by");
 const PORT = Number(process.env.PORT || 5000);
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/portfolio_db";
 
@@ -49,18 +53,52 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/portfo
 // ADMIN_PASSWORD=your-secure-password
 
 let adminCredentials = {
-  email: process.env.ADMIN_EMAIL || "hello@ashutoshranjan.com",
+  email: process.env.ADMIN_EMAIL || "helloashutosh1@outlook.com",
   password: process.env.ADMIN_PASSWORD || "admin123"
 };
 
+if (process.env.NODE_ENV === "production") {
+  if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD === "admin123") {
+    throw new Error("ADMIN_EMAIL and ADMIN_PASSWORD must be set to secure values in production.");
+  }
+}
+
 let adminSession = null;
 
-// Enhanced middleware
+// Security + rate limiting
+app.use(helmet());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const allowedOrigins = (process.env.ALLOWED_ORIGIN || "*")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGIN || '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Accept']
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.includes("*") || allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Accept", "Authorization"]
 }));
+
+// Enhanced middleware
+app.use("/api", limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.resolve(__dirname, "..", "frontend"), {
@@ -113,6 +151,11 @@ app.post("/api/newsletter/subscribe", async (req, res) => {
   }
 });
 
+// Health check (Render)
+app.get("/health", (_req, res) => {
+  return res.status(200).json({ status: "ok", time: new Date().toISOString() });
+});
+
 // ============ ANALYTICS API ============
 app.post("/api/analytics/track", async (req, res) => {
   try {
@@ -150,7 +193,7 @@ app.post("/api/services/inquire", async (req, res) => {
       budget: budget || '', timeline: timeline || '', requirements
     });
 
-    return res.status(201).json({ success: true, message: "Your inquiry has: inquiry._id been submitted!", id });
+    return res.status(201).json({ success: true, message: "Your inquiry has been submitted!", id: inquiry._id });
   } catch (error) {
     return res.status(500).json({ success: false, message: "Unable to submit inquiry." });
   }
@@ -183,7 +226,7 @@ app.get("/api/resume/download", (_req, res) => {
 
   doc.fontSize(26).fillColor("#0a8f6a").text("Ashutosh Ranjan", { continued: true }).fillColor("#112031").text("  |  Full Stack Developer");
   doc.moveDown(0.5);
-  doc.fontSize(11).fillColor("#4b6078").text("Email: hello@ashutoshranjan.com  |  GitHub: github.com/  |  LinkedIn: linkedin.com/in/");
+  doc.fontSize(11).fillColor("#4b6078").text("Email: helloashutosh1@outlook.com  |  GitHub: github.com/webdevashu123  |  LinkedIn: linkedin.com/in/ashutosh-ranjan-dev/");
   doc.moveDown();
 
   doc.fontSize(14).fillColor("#112031").text("Professional Summary");
@@ -212,6 +255,7 @@ app.get("/api/resume/download", (_req, res) => {
 
 // ============ ADMIN LOGIN ============
 app.post("/api/admin/login", async (req, res) => {
+  authLimiter(req, res, async () => {
   try {
     const { email, password } = req.body;
     
@@ -232,6 +276,7 @@ app.post("/api/admin/login", async (req, res) => {
   } catch (error) {
     return res.status(500).json({ success: false, message: "Login error" });
   }
+  });
 });
 
 // ============ ADMIN LOGOUT ============
@@ -357,7 +402,7 @@ app.post("/api/admin/update-credentials", requireAdmin, async (req, res) => {
 // ============ RESUME PDF ============
 // Place your resume.pdf in the frontend folder and it will be accessible at /resume.pdf
 app.get("/resume.pdf", (_req, res) => {
-  const resumePath = path.resolve(__dirname, "..", "frontend", "resume.pdf");
+  const resumePath = path.resolve(__dirname, "..", "frontend", "public", "resume.pdf");
   res.sendFile(resumePath, (err) => {
     if (err) {
       res.redirect("/api/resume/download");
@@ -370,9 +415,20 @@ app.get("/", (_req, res) => {
   res.sendFile(path.resolve(__dirname, "..", "frontend", "index.html"));
 });
 
+// Global error handler
+app.use((err, _req, res, _next) => {
+  if (err && err.message && err.message.includes("CORS")) {
+    return res.status(403).json({ success: false, message: "CORS blocked for this origin." });
+  }
+  console.error("Unhandled error:", err);
+  return res.status(500).json({ success: false, message: "Server error." });
+});
+
 // ============ START SERVER ============
 app.listen(PORT, () => {
   console.log(`\n🌐 Server running on http://localhost:${PORT}`);
   console.log(`📝 Admin Panel: http://localhost:${PORT}/#/admin`);
   console.log(`📄 Resume: http://localhost:${PORT}/resume.pdf\n`);
 });
+
+
