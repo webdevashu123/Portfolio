@@ -568,6 +568,10 @@ export default function AIChatbot() {
     padding: 0
   };
 
+  if (typeof window !== 'undefined' && window.innerWidth <= 767) {
+    fixedButtonStyle.right = '12px';
+  }
+
   const chatWindowStyle = {
     position: 'fixed',
     bottom: '100px',
