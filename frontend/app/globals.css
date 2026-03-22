@@ -311,11 +311,13 @@ main {
 /* Hero Typed Text - Below name with spacing */
 .hero-typed {
   margin-top: 0.5rem;
+  min-height: 2.4rem;
 }
 
 .hero-typed .gradient-text {
   font-size: clamp(3rem, 3vw, 1.75rem);
   font-weight: 600;
+  display: inline-block;
 }
 
 .hero-description {
@@ -1110,6 +1112,10 @@ main {
     font-size: clamp(1.4rem, 5vw, 2rem);
   }
 
+  .hero-typed {
+    min-height: 2rem;
+  }
+
   .hero-description {
     font-size: 0.9rem;
     line-height: 1.5;
@@ -1137,11 +1143,15 @@ main {
     gap: 0.75rem;
     flex-wrap: nowrap;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
+    flex-direction: row;
   }
 
   .stat-item {
-    min-width: 90px;
+    min-width: 0;
+    flex: 1;
+    align-items: center;
+    text-align: center;
   }
   
   .newsletter-form {
