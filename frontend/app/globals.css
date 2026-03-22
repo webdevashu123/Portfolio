@@ -1206,66 +1206,7 @@ main {
   }
 }
 
-@media (max-width: 480px) {
-  .hero {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    position: relative;
-    padding: 1.5rem 1rem;
-    gap: 1rem;
-    align-items: flex-start;
-    border-radius: 18px;
-  }
 
-  .hero.container {
-    max-width: 100%;
-    width: 100%;
-    padding: 0 1rem;
-  }
-
-  .hero-visual {
-    width: 90vw;
-    max-width: 340px;
-    height: auto;
-    margin: 1rem auto 0;
-  }
-
-  .hero-code-window,
-  .code-content {
-    max-width: 100%;
-    height: auto;
-    overflow-x: auto;
-    overflow-y: visible;
-    font-size: 0.75rem;
-  }
-
-  .hero-content,
-  .hero-actions,
-  .hero-stats,
-  .hero-description,
-  .hero-actions .btn,
-  .hero-actions .resume-btn,
-  .stat-item {
-    max-width: 100% !important;
-    box-sizing: border-box;
-    height: auto;
-    overflow: hidden;
-    padding: 0;
-    width: auto;
-  }
-
-  .hero-stats {
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: flex-start;
-  }
-
-  .typing-cursor {
-    display: none;
-  }
-}
 
 @media (max-width: 412px) {
   .hero {
