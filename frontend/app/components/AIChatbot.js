@@ -550,7 +550,7 @@ export default function AIChatbot() {
   const fixedButtonStyle = {
     position: 'fixed',
     bottom: '24px',
-    right: '24px',
+    right: '12px',
     width: '72px',
     height: '72px',
     borderRadius: '18px',
@@ -568,9 +568,6 @@ export default function AIChatbot() {
     padding: 0
   };
 
-  if (typeof window !== 'undefined' && window.innerWidth <= 767) {
-    fixedButtonStyle.right = '12px';
-  }
 
   const chatWindowStyle = {
     position: 'fixed',
