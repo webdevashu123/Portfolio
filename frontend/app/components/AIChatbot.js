@@ -593,6 +593,7 @@ export default function AIChatbot() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         style={fixedButtonStyle}
+        className="chat-toggle"
         onMouseOver={(e) => {
           e.currentTarget.style.transform = 'translateY(-2px)';
           e.currentTarget.style.boxShadow = '0 16px 34px rgba(10, 143, 106, 0.35)';
@@ -638,7 +639,7 @@ export default function AIChatbot() {
       </button>
 
       {isOpen && (
-        <div style={chatWindowStyle}>
+        <div style={chatWindowStyle} className="chat-window">
           <div
             style={{
               padding: '14px 16px',
@@ -1191,6 +1192,27 @@ export default function AIChatbot() {
       )}
 
       <style jsx>{`
+        .chat-window {
+          box-sizing: border-box;
+        }
+
+        @media (max-width: 520px) {
+          .chat-window {
+            left: 12px !important;
+            right: 12px !important;
+            width: auto !important;
+            max-width: none !important;
+            bottom: 90px !important;
+            height: calc(100vh - 140px) !important;
+            max-height: calc(100vh - 140px) !important;
+          }
+
+          .chat-toggle {
+            right: 10px !important;
+            bottom: 18px !important;
+          }
+        }
+
         .typing::after {
           content: '...';
           display: inline-block;
