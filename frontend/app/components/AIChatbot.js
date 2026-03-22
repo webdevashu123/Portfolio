@@ -1198,8 +1198,8 @@ export default function AIChatbot() {
 
         @media (max-width: 520px) {
           .chat-window {
-            left: 12px !important;
-            right: 12px !important;
+            left: 8px !important;
+            right: 8px !important;
             width: auto !important;
             max-width: none !important;
             bottom: 90px !important;
