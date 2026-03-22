@@ -1520,3 +1520,15 @@ main {
       0 12px 32px rgba(0, 0, 0, 0.4);
   }
 }
+
+/* ============================================================
+   HERO CENTER FIX — paste at the very END of globals.css
+   ============================================================ */
+
+/* Restore hero centering on desktop — margin: 0 auto was lost */
+@media (min-width: 768px) {
+  .hero {
+    margin: 1rem auto 0;   /* auto left+right = centered inside container */
+    max-width: 100%;
+  }
+}
