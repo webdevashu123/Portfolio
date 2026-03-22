@@ -184,7 +184,10 @@ export default function Home() {
                 <code>{`const developer = {
   name: "Ashutosh Ranjan",
   role: "Full Stack Developer",
-  skills: ["React", "Node.js", "MongoDB", "Next.js"],
+  skills: [
+  "React", "Node.js", 
+  "MongoDB", "Next.js"
+  ],
   available: true
 };
 
