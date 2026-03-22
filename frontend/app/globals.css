@@ -1431,3 +1431,92 @@ main {
   .error-title { font-size: 1.5rem; }
   .error-actions { flex-direction: column; }
 }
+
+/* ============================================================
+   DESKTOP RESTORE PATCH
+   Paste these at the END of your globals.css.
+   They override any mobile rules that leaked into desktop.
+   ============================================================ */
+
+/* 1. Restore container padding on desktop */
+@media (min-width: 768px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+/* 2. Restore hero to original desktop appearance */
+@media (min-width: 768px) {
+  .hero {
+    margin: 1rem 0 0;          /* original — no left/right margin */
+    max-width: 100%;           /* remove the calc() restriction */
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.04),
+      0 4px 12px rgba(0, 0, 0, 0.06),
+      0 16px 40px rgba(0, 0, 0, 0.08);
+    padding: 3rem 1.5rem;
+  }
+
+  /* Remove glow orbs on desktop */
+  .hero::before,
+  .hero::after {
+    display: none;
+  }
+
+  /* Restore content z-index */
+  .hero-content,
+  .hero-visual {
+    position: relative;
+    z-index: auto;
+  }
+}
+
+/* 3. Restore desktop 2-column layout */
+@media (min-width: 1024px) {
+  .hero {
+    grid-template-columns: 1.2fr 0.8fr;
+    padding: 4rem;
+  }
+}
+
+/* 4. Restore stats to original flex row on desktop */
+@media (min-width: 768px) {
+  .hero-stats {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .stat-item {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    text-align: left;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+  }
+
+  .stat-label {
+    font-size: 0.875rem;
+  }
+}
+
+/* 5. Restore dark mode hero border on desktop */
+@media (min-width: 768px) {
+  [data-theme="dark"] .hero {
+    border-color: var(--border);
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.2),
+      0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+}
