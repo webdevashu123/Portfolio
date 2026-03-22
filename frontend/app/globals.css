@@ -1079,20 +1079,20 @@ main {
 @media (max-width: 767px) {
   .hero {
     overflow: visible;
-    padding: 2.25rem 1.25rem;
-    gap: 1.5rem;
+    padding: 1.75rem 1rem;
+    gap: 1rem;
   }
 
   .hero-content {
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .hero-visual {
     display: block;
     margin-top: 1.5rem;
     width: 100%;
-    max-width: 520px;
+    max-width: 420px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -1103,38 +1103,43 @@ main {
   }
 
   .hero-title {
-    font-size: clamp(1.8rem, 6vw, 2.4rem);
+    font-size: clamp(1.6rem, 6vw, 2.1rem);
   }
 
   .hero-typed .gradient-text {
-    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-size: clamp(1.4rem, 5vw, 2rem);
   }
 
   .hero-description {
-    font-size: 1rem;
+    font-size: 0.95rem;
     max-width: 100%;
   }
 
   .hero-actions {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.75rem;
   }
 
   .hero-actions .btn,
   .hero-actions .resume-btn {
-    width: 100%;
-    max-width: 320px;
+    width: auto;
+    max-width: none;
   }
 
   .code-content {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 
   .hero-stats {
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .stat-item {
+    min-width: 90px;
   }
   
   .newsletter-form {
