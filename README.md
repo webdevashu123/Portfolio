@@ -135,6 +135,7 @@ Backend (Render):
 2. Set `MONGODB_URI` to your Atlas connection string.
 3. Set `ADMIN_EMAIL` and a strong `ADMIN_PASSWORD`.
 4. Set `ALLOWED_ORIGIN` to your Vercel domain (comma-separated).
+5. Set `FRONTEND_URL` to your Vercel/custom domain.
 5. Deploy `backend/`. Health check: `/health`.
 
 ---
