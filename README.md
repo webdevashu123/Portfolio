@@ -73,4 +73,4 @@ frontend/public/resume.pdf
 ![Technical Skills](./frontend/assets/screenshots/technicalskills.png)
 
 ### 📬 Contact Section
-![Contact](./frontend/assets/screenshorts/contact.png)
+![Contact](./frontend/assets/screenshots/contact.png)
