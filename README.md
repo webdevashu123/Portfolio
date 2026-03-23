@@ -1,4 +1,4 @@
-![Portfolio Preview](./frontend/assets/screenshorts/homepage_dark%20(2).png)
+![Portfolio Preview](./frontend/assets/screenshots/homepage_dark%20(2).png)
 
 # Ashutosh Ranjan Portfolio
 
@@ -52,28 +52,28 @@ frontend/public/resume.pdf
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-![Home](./frontend/assets/screenshorts/Homepage_light.png)
+![Home](./frontend/assets/screenshots/Homepage_light.png)
 
 ### 🌗 Dark Mode
-![Dark Mode](./frontend/assets/screenshorts/homepage_dark%20(2).png)
+![Dark Mode](./frontend/assets/screenshots/homepage_dark%20(2).png)
 
 ### 🤖 AI Assistant (Light)
-![AI Assistant Light](./frontend/assets/screenshorts/Ai.png)
+![AI Assistant Light](./frontend/assets/screenshots/Ai.png)
 
 ### 🤖 AI Assistant (Dark)
-![AI Assistant Dark](./frontend/assets/screenshorts/Ai_dark.png)
+![AI Assistant Dark](./frontend/assets/screenshots/Ai_dark.png)
 
 ### 📱 Mobile View
-![Mobile](./frontend/assets/screenshorts/mobile_light.png)
+![Mobile](./frontend/assets/screenshots/mobile_light.png)
 
 ### 📄 Projects Section
-![Projects](./frontend/assets/screenshorts/projects.png)
+![Projects](./frontend/assets/screenshots/projects.png)
 
 ### 🛠️ Technical Skills 
-![Technical Skills](./frontend/assets/screenshorts/technicalskills.png)
+![Technical Skills](./frontend/assets/screenshots/technicalskills.png)
 
 ### 📬 Contact Section
-![Contact](./frontend/assets/screenshorts/contact.png)
+![Contact](./frontend/assets/screenshots/contact.png)
 
 ### 🔐 Admin Sign In
 ![Admin Sign In](./frontend/assets/screenshots/admin_signin.png)
@@ -82,7 +82,7 @@ frontend/public/resume.pdf
 ![Admin Dashboard](./frontend/assets/screenshots/admin_dashboard.png)
 
 ### 🧭 Admin Analytics
-![Admin Functions](./frontend/assets/screenshots/admin_analytics.png)
+![Admin Analytics](./frontend/assets/screenshots/admin_analytics.png)
 
 ### 📰 Admin Newsletter
 ![Admin Newsletter](./frontend/assets/screenshots/newsletter_admin.png)
