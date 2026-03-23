@@ -1,4 +1,4 @@
-![Portfolio Preview](./assets/screenshots/homepage_dark(2).png)
+![Portfolio Preview](./assets/screenshots/homepage_dark%282%29.png)
 
 # Ashutosh Ranjan Portfolio
 
@@ -51,21 +51,22 @@ frontend/public/resume.pdf
 
 ## 📸 Screenshots
 
+## 📸 Screenshots
+
 ### 🏠 Home Page
 ![Home](./assets/screenshots/Homepage_light.png)
 
 ### 🌗 Dark Mode
-![Dark Mode](./assets/screenshots/homepage_dark(2).png)
+![Dark Mode](./assets/screenshots/homepage_dark%282%29.png)
 
-### 🤖 AI Assistant
-![AI Assistant](./assets/screenshots/ai.png)
+### 🤖 AI Assistant (Light)
+![AI Assistant Light](./assets/screenshots/ai.png)
 
-### 🤖 AI Assistant-Dark
-![AI Assistant](./assets/screenshots/ai_dark.png)
+### 🤖 AI Assistant (Dark)
+![AI Assistant Dark](./assets/screenshots/ai_dark.png)
 
 ### 📱 Mobile View
 ![Mobile](./assets/screenshots/mobile_light.png)
-
 
 ### 📄 Projects Section
 ![Projects](./assets/screenshots/projects.png)
@@ -75,4 +76,3 @@ frontend/public/resume.pdf
 
 ### 📬 Contact Section
 ![Contact](./assets/screenshots/contact.png)
-
