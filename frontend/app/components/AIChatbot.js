@@ -605,6 +605,7 @@ export default function AIChatbot() {
         title="Chat with AI"
       >
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span className="chat-cta" aria-hidden="true">Ask AI</span>
           <span className="chat-pulse" aria-hidden="true"></span>
           {isOpen && (
             <span
@@ -1212,6 +1213,11 @@ export default function AIChatbot() {
             right: 10px !important;
             bottom: 18px !important;
           }
+
+          .chat-cta {
+            font-size: 0.7rem;
+            padding: 6px 10px;
+          }
         }
 
         .typing::after {
@@ -1221,10 +1227,26 @@ export default function AIChatbot() {
           animation: dots 1.2s steps(4, end) infinite;
         }
 
+        .chat-cta {
+          position: absolute;
+          bottom: calc(100% + 8px);
+          right: 0;
+          padding: 6px 12px;
+          border-radius: 999px;
+          background: linear-gradient(135deg, #0a8f6a, #22c55e);
+          color: white;
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          box-shadow: 0 10px 20px rgba(10, 143, 106, 0.25);
+          pointer-events: none;
+          white-space: nowrap;
+        }
+
         .chat-pulse {
           position: absolute;
-          top: -6px;
-          right: -6px;
+          top: 6px;
+          right: 6px;
           width: 10px;
           height: 10px;
           border-radius: 999px;
