@@ -1,3 +1,5 @@
+![Portfolio Preview](./assets/screenshots/homepage_dark(2).png)
+
 # Ashutosh Ranjan Portfolio
 
 ## Overview
@@ -46,3 +48,31 @@ Place the latest file here:
 ```
 frontend/public/resume.pdf
 ```
+
+## 📸 Screenshots
+
+### 🏠 Home Page
+![Home](./assets/screenshots/Homepage_light.png)
+
+### 🌗 Dark Mode
+![Dark Mode](./assets/screenshots/homepage_dark(2).png)
+
+### 🤖 AI Assistant
+![AI Assistant](./assets/screenshots/ai.png)
+
+### 🤖 AI Assistant-Dark
+![AI Assistant](./assets/screenshots/ai_dark.png)
+
+### 📱 Mobile View
+![Mobile](./assets/screenshots/mobile_light.png)
+
+
+### 📄 Projects Section
+![Projects](./assets/screenshots/projects.png)
+
+### 🛠️ Technical Skills 
+![Technical Skills](./assets/screenshots/technicalskills.png)
+
+### 📬 Contact Section
+![Contact](./assets/screenshots/contact.png)
+
