@@ -102,7 +102,7 @@ export default function Services() {
     <div className="page-container">
       <header className="site-header">
         <div className="container nav-wrap">
-          <Link href="/" className="brand">Ashutosh<span className="brand-dot">.</span>Ranjan</Link>
+          <Link href="/" className="brand">Ashutosh<span className="brand-dot">.</span>Dev</Link>
           <nav className={`nav ${mobileMenuOpen ? 'show' : ''}`} id="mainNav">
             <Link href="/">Home</Link>
             <Link href="/about">About</Link>
