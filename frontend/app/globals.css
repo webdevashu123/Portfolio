@@ -725,6 +725,7 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 3rem;
+  margin: 2rem 0;
   text-align: center;
 }
 
