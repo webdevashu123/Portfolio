@@ -1,18 +1,59 @@
-import { NextResponse } from 'next/server';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+import {
+  API_URL,
+  IS_DEV,
+  buildForwardHeaders,
+  fetchWithTimeout,
+  getClientIp,
+  isValidEmail,
+  jsonResponse,
+  rateLimit,
+  readJson,
+  sanitizeString
+} from '../../_utils/security';
 
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const response = await fetch(`${API_URL}/api/admin/login`, {
+    const ip = getClientIp(request);
+    const limit = rateLimit(`admin-login:${ip}`, 5, 10 * 60_000);
+    if (!limit.ok) {
+      return jsonResponse(
+        { success: false, message: 'Too many attempts. Please try again later.' },
+        429,
+        { 'Retry-After': Math.ceil((limit.reset - Date.now()) / 1000) }
+      );
+    }
+
+    const { data: body, error } = await readJson(request, 8_000);
+    if (error) {
+      return jsonResponse({ success: false, message: error }, 400);
+    }
+
+    const email = sanitizeString(body?.email, 254);
+    const password = sanitizeString(body?.password, 200);
+    if (!email || !isValidEmail(email) || !password) {
+      return jsonResponse({ success: false, message: 'Invalid credentials.' }, 400);
+    }
+
+    const response = await fetchWithTimeout(`${API_URL}/api/admin/login`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      headers: buildForwardHeaders(request, { 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ ...body, email, password }),
+      cache: 'no-store'
     });
-    const data = await response.json();
-    return NextResponse.json(data, { status: response.status });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch (err) {
+      data = { success: false, message: 'Upstream error' };
+    }
+
+    const setCookie = response.headers.get('set-cookie');
+    return jsonResponse(data, response.status, setCookie ? { 'Set-Cookie': setCookie } : {});
   } catch (error) {
-    return NextResponse.json({ success: false, message: 'Connection error' }, { status: 500 });
+    if (IS_DEV) {
+      return jsonResponse({ success: false, message: 'Connection error (demo mode)' }, 200);
+    }
+    return jsonResponse({ success: false, message: 'Connection error' }, 502);
   }
 }

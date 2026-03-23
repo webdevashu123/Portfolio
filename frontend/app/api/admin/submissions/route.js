@@ -1,16 +1,49 @@
-import { NextResponse } from 'next/server';
+import {
+  API_URL,
+  IS_DEV,
+  buildForwardHeaders,
+  fetchWithTimeout,
+  getClientIp,
+  jsonResponse,
+  rateLimit
+} from '../../_utils/security';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
-export async function GET() {
+export async function GET(request) {
   try {
-    const response = await fetch(`${API_URL}/api/admin/submissions`, {
+    const ip = getClientIp(request);
+    const limit = rateLimit(`admin-submissions:${ip}`, 30, 60_000);
+    if (!limit.ok) {
+      return jsonResponse(
+        { success: false, data: { contacts: [], inquiries: [], newsletters: [] } },
+        429,
+        { 'Retry-After': Math.ceil((limit.reset - Date.now()) / 1000) }
+      );
+    }
+
+    const response = await fetchWithTimeout(`${API_URL}/api/admin/submissions`, {
       method: 'GET',
-      credentials: 'include'
+      headers: buildForwardHeaders(request),
+      cache: 'no-store'
     });
-    const data = await response.json();
-    return NextResponse.json(data, { status: response.status });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch (err) {
+      data = { success: false, data: { contacts: [], inquiries: [], newsletters: [] } };
+    }
+
+    return jsonResponse(data, response.status);
   } catch (error) {
-    return NextResponse.json({ success: false, data: { contacts: [], inquiries: [], newsletters: [] } }, { status: 200 });
+    if (IS_DEV) {
+      return jsonResponse(
+        { success: false, data: { contacts: [], inquiries: [], newsletters: [] }, demo: true },
+        200
+      );
+    }
+    return jsonResponse(
+      { success: false, data: { contacts: [], inquiries: [], newsletters: [] } },
+      502
+    );
   }
 }
