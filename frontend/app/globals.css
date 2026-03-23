@@ -753,6 +753,18 @@ main {
   border-color: var(--primary);
 }
 
+@media (max-width: 640px) {
+  .newsletter-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .newsletter-form .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* CTA Band */
 .cta-band {
   display: grid;

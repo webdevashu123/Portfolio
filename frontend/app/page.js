@@ -99,7 +99,7 @@ export default function Home() {
       <header className="site-header">
         <div className="container nav-wrap">
           <Link href="/" className="brand">
-            Ashutosh<span className="brand-dot">.</span>Ranjan
+            Ashutosh<span className="brand-dot">.</span>Dev
           </Link>
           <nav className={`nav ${mobileMenuOpen ? 'show' : ''}`} id="mainNav">
             <Link href="/">Home</Link>

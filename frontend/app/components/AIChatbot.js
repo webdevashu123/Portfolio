@@ -605,6 +605,7 @@ export default function AIChatbot() {
         title="Chat with AI"
       >
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span className="chat-pulse" aria-hidden="true"></span>
           {isOpen && (
             <span
               style={{
@@ -1202,9 +1203,9 @@ export default function AIChatbot() {
             right: 8px !important;
             width: auto !important;
             max-width: none !important;
-            bottom: 90px !important;
-            height: calc(100vh - 140px) !important;
-            max-height: calc(100vh - 140px) !important;
+            bottom: 88px !important;
+            height: min(70vh, 520px) !important;
+            max-height: 70vh !important;
           }
 
           .chat-toggle {
