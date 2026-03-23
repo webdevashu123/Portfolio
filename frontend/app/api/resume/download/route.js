@@ -8,7 +8,7 @@ import {
   getClientIp,
   jsonResponse,
   rateLimit
-} from '../_utils/security';
+} from '../../_utils/security';
 
 export async function GET(request) {
   try {
@@ -70,4 +70,3 @@ export async function GET(request) {
     );
   }
 }
-
