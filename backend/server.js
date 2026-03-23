@@ -33,6 +33,7 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const mongoose = require("mongoose");
 const PDFDocument = require("pdfkit");
+const crypto = require("crypto");
 const ContactSubmission = require("./models/ContactSubmission");
 const Newsletter = require("./models/Newsletter");
 const Analytics = require("./models/Analytics");
@@ -65,6 +66,8 @@ if (process.env.NODE_ENV === "production") {
 }
 
 let adminSession = null;
+const adminSessions = new Map();
+const SESSION_TTL_MS = 1000 * 60 * 60 * 12;
 
 // Security + rate limiting
 app.use(helmet());
@@ -79,6 +82,20 @@ const limiter = rateLimit({
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 30,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const contactLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 40,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const newsletterLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 60,
   standardHeaders: true,
   legacyHeaders: false
 });
@@ -103,6 +120,61 @@ app.use("/api", limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+const parseCookies = (cookieHeader = "") => {
+  const out = {};
+  cookieHeader.split(";").forEach((part) => {
+    const [k, ...v] = part.split("=");
+    if (!k) return;
+    out[k.trim()] = decodeURIComponent(v.join("=").trim() || "");
+  });
+  return out;
+};
+
+const sanitize = (value, max = 200) => {
+  if (typeof value !== "string") return "";
+  return value.trim().slice(0, max);
+};
+
+const isValidEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
+
+const createSession = (email) => {
+  const token = crypto.randomBytes(24).toString("hex");
+  adminSessions.set(token, { email, exp: Date.now() + SESSION_TTL_MS });
+  return token;
+};
+
+const getSession = (req) => {
+  const cookies = parseCookies(req.headers.cookie || "");
+  const token = cookies.admin_session;
+  if (!token) return null;
+  const entry = adminSessions.get(token);
+  if (!entry) return null;
+  if (entry.exp < Date.now()) {
+    adminSessions.delete(token);
+    return null;
+  }
+  return { token, ...entry };
+};
+
+const setAdminCookie = (res, token) => {
+  const isProd = process.env.NODE_ENV === "production";
+  const secure = isProd ? "Secure; " : "";
+  const sameSite = isProd ? "Strict" : "Lax";
+  res.setHeader(
+    "Set-Cookie",
+    `admin_session=${token}; Path=/; HttpOnly; ${secure}SameSite=${sameSite}; Max-Age=${Math.floor(
+      SESSION_TTL_MS / 1000
+    )}`
+  );
+};
+
+const clearAdminCookie = (res) => {
+  res.setHeader(
+    "Set-Cookie",
+    "admin_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
+  );
+};
+
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -124,14 +196,15 @@ mongoose
   });
 
 // ============ NEWSLETTER API ============
-app.post("/api/newsletter/subscribe", async (req, res) => {
+app.post("/api/newsletter/subscribe", newsletterLimiter, async (req, res) => {
   try {
     const { email } = req.body;
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+    const safeEmail = sanitize(email, 254);
+    if (!safeEmail || !isValidEmail(safeEmail)) {
       return res.status(400).json({ success: false, message: "Please provide a valid email address." });
     }
 
-    const existing = await Newsletter.findOne({ email: email.toLowerCase() });
+    const existing = await Newsletter.findOne({ email: safeEmail.toLowerCase() });
     if (existing && existing.status === 'active') {
       return res.status(409).json({ success: false, message: "This email is already subscribed!" });
     }
@@ -140,7 +213,7 @@ app.post("/api/newsletter/subscribe", async (req, res) => {
       existing.status = 'active';
       await existing.save();
     } else {
-      await Newsletter.create({ email: email.toLowerCase() });
+      await Newsletter.create({ email: safeEmail.toLowerCase() });
     }
 
     return res.status(201).json({ success: true, message: "Successfully subscribed!" });
@@ -165,8 +238,8 @@ app.post("/api/analytics/track", async (req, res) => {
 
     await Analytics.create({
       eventType,
-      page: page || '/',
-      projectId: projectId || null,
+      page: sanitize(page || '/', 200),
+      projectId: sanitize(projectId || "", 80) || null,
       referrer: req.get('referer') || null,
       userAgent: req.get('user-agent') || null
     });
@@ -178,17 +251,28 @@ app.post("/api/analytics/track", async (req, res) => {
 });
 
 // ============ SERVICE INQUIRY API ============
-app.post("/api/services/inquire", async (req, res) => {
+app.post("/api/services/inquire", contactLimiter, async (req, res) => {
   try {
     const { name, email, company, serviceType, projectScope, budget, timeline, requirements } = req.body;
 
-    if (!name || !email || !serviceType || !requirements) {
+    const safeName = sanitize(name, 100);
+    const safeEmail = sanitize(email, 254);
+    const safeService = sanitize(serviceType, 80);
+    const safeReq = sanitize(requirements, 2000);
+
+    if (!safeName || !safeEmail || !isValidEmail(safeEmail) || !safeService || !safeReq) {
       return res.status(400).json({ success: false, message: "Name, email, service type, and requirements are required." });
     }
 
     const inquiry = await ServiceInquiry.create({
-      name, email, company: company || '', serviceType, projectScope: projectScope || 'medium',
-      budget: budget || '', timeline: timeline || '', requirements
+      name: safeName,
+      email: safeEmail,
+      company: sanitize(company || "", 120),
+      serviceType: safeService,
+      projectScope: sanitize(projectScope || "medium", 40),
+      budget: sanitize(budget || "", 40),
+      timeline: sanitize(timeline || "", 40),
+      requirements: safeReq
     });
 
     return res.status(201).json({ success: true, message: "Your inquiry has been submitted!", id: inquiry._id });
@@ -198,14 +282,26 @@ app.post("/api/services/inquire", async (req, res) => {
 });
 
 // ============ CONTACT API ============
-app.post("/api/contact", async (req, res) => {
+app.post("/api/contact", contactLimiter, async (req, res) => {
   try {
     const { name, email, projectType, budget, message } = req.body;
-    if (!name || !email || !message) {
+    const safeName = sanitize(name, 100);
+    const safeEmail = sanitize(email, 254);
+    const safeMessage = sanitize(message, 2000);
+    const safeProjectType = sanitize(projectType || "", 80);
+    const safeBudget = sanitize(budget || "", 40);
+
+    if (!safeName || !safeEmail || !isValidEmail(safeEmail) || !safeMessage) {
       return res.status(400).json({ success: false, message: "Name, email, and message are required." });
     }
 
-    const submission = await ContactSubmission.create({ name, email, projectType: projectType || "", budget: budget || "", message });
+    const submission = await ContactSubmission.create({
+      name: safeName,
+      email: safeEmail,
+      projectType: safeProjectType,
+      budget: safeBudget,
+      message: safeMessage
+    });
 
     return res.status(201).json({ success: true, message: "Your message has been submitted successfully.", id: submission._id });
   } catch (error) {
@@ -252,21 +348,24 @@ app.get("/api/resume/download", (_req, res) => {
 });
 
 // ============ ADMIN LOGIN ============
-app.post("/api/admin/login", async (req, res) => {
-  authLimiter(req, res, async () => {
+app.post("/api/admin/login", authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
+    const safeEmail = sanitize(email, 254);
+    const safePassword = sanitize(password, 200);
     
-    if (!email || !password) {
+    if (!safeEmail || !safePassword) {
       return res.status(400).json({ success: false, message: "Email and password required" });
     }
 
-    if (email === adminCredentials.email && password === adminCredentials.password) {
-      adminSession = { email: email, loginTime: new Date().toISOString() };
+    if (safeEmail === adminCredentials.email && safePassword === adminCredentials.password) {
+      adminSession = { email: safeEmail, loginTime: new Date().toISOString() };
+      const token = createSession(safeEmail);
+      setAdminCookie(res, token);
       return res.status(200).json({ 
         success: true, 
         message: "Login successful",
-        admin: { email: email }
+        admin: { email: safeEmail }
       });
     } else {
       return res.status(401).json({ success: false, message: "Invalid credentials" });
@@ -274,22 +373,27 @@ app.post("/api/admin/login", async (req, res) => {
   } catch (error) {
     return res.status(500).json({ success: false, message: "Login error" });
   }
-  });
 });
 
 // ============ ADMIN LOGOUT ============
-app.post("/api/admin/logout", (_req, res) => {
+app.post("/api/admin/logout", (req, res) => {
+  const session = getSession(req);
+  if (session?.token) {
+    adminSessions.delete(session.token);
+  }
   adminSession = null;
+  clearAdminCookie(res);
   return res.status(200).json({ success: true, message: "Logged out" });
 });
 
 // ============ ADMIN CHECK ============
-app.get("/api/admin/check", (_req, res) => {
-  if (adminSession) {
+app.get("/api/admin/check", (req, res) => {
+  const session = getSession(req);
+  if (session || adminSession) {
     return res.status(200).json({ 
       success: true, 
       authenticated: true,
-      admin: { email: adminSession.email }
+      admin: { email: session?.email || adminSession?.email }
     });
   }
   return res.status(200).json({ success: true, authenticated: false });
@@ -297,7 +401,8 @@ app.get("/api/admin/check", (_req, res) => {
 
 // Middleware to check admin authentication
 const requireAdmin = (req, res, next) => {
-  if (!adminSession) {
+  const session = getSession(req);
+  if (!session && !adminSession) {
     return res.status(401).json({ success: false, message: "Unauthorized" });
   }
   next();
@@ -387,9 +492,12 @@ app.delete("/api/admin/submission/:type/:id", requireAdmin, async (req, res) => 
 app.post("/api/admin/update-credentials", requireAdmin, async (req, res) => {
   try {
     const { email, password } = req.body;
-    
-    if (email) adminCredentials.email = email;
-    if (password) adminCredentials.password = password;
+
+    const safeEmail = sanitize(email, 254);
+    const safePassword = sanitize(password, 200);
+
+    if (safeEmail) adminCredentials.email = safeEmail;
+    if (safePassword) adminCredentials.password = safePassword;
     
     return res.status(200).json({ success: true, message: "Credentials updated. Restart server for changes to take effect." });
   } catch (error) {
