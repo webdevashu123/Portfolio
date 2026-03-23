@@ -255,6 +255,7 @@ export default function Contact() {
                     <option>$2,000 - $5,000</option>
                     <option>$5,000 - $10,000</option>
                     <option>$10,000+</option>
+                    <option>Other</option>
                   </select>
                 </div>
 
