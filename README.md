@@ -82,7 +82,7 @@ frontend/public/resume.pdf
 ![Admin Dashboard](./frontend/assets/screenshots/admin_dashboard.png)
 
 ### 🧭 Admin Analytics
-![Admin Analytics](./frontend/assets/screenshots/admin_analytics.png)
+![Admin Analytics](./frontend/assets/screenshots/analytics.png)
 
 ### 📰 Admin Newsletter
 ![Admin Newsletter](./frontend/assets/screenshots/newsletter_admin.png)
